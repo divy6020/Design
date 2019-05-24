@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
         nextPageIndex = slideDirection == SlideDirection.leftToRight
                           ? activeIndex - 1
                           : activeIndex + 1;
-        nextPageIndex.clamp(0.0, pages.length ); //-1
+        nextPageIndex.clamp(0.0, pages.length - 1);
         }
         else if(event.update == UpdateType.donedragging)
         {
