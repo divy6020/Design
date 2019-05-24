@@ -41,7 +41,7 @@ class PagerIndicator extends StatelessWidget {
       )));
     }
 
-    final BUBBLE_WIDTH = 55.0;
+    final BUBBLE_WIDTH = 45.0;
     final basetranslation =
         ((viewModel.pages.length * BUBBLE_WIDTH) / 2) - (BUBBLE_WIDTH / 2);
     var translation = basetranslation - (viewModel.activeIndex * BUBBLE_WIDTH);

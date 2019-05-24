@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 final pages = [
-  new PageViewModel('Amazing Products at Amazing Prices', Colors.blue[200],
-      'assets/1.png', 'assets/4.png', 'Buy'),
-  new PageViewModel('Get the right value for your product', Colors.green[200],
-      'assets/2.png', 'assets/4.png', 'Sell'),
-  new PageViewModel('Know your products worth', Colors.purple[200],
-      'assets/3.png', 'assets/4.png', 'Appraise'),
+  new PageViewModel('Amazing Products at Amazing Prices', Colors.yellow[700],
+      'assets/1.png', 'assets/5.png', 'Buy'),
+  new PageViewModel('Get the right value for your product', Colors.blue[700],
+      'assets/2.png', 'assets/5.png', 'Sell'),
+  new PageViewModel('Know your products worth', Colors.pink[700],
+      'assets/3.png', 'assets/5.png', 'Appraise'),
 ];
 
 class Page extends StatelessWidget {

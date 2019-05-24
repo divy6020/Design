@@ -15,7 +15,7 @@ class PageDragger extends StatefulWidget {
 }
 
 class _PageDraggerState extends State<PageDragger> {
-  static const FULL_TRANSITION = 200.0;
+  static const FULL_TRANSITION = 300.0;
   Offset dragStart;
   SlideDirection slideDirection;
   double slidePercent = 0.0;
