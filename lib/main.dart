@@ -26,9 +26,10 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => new _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   StreamController<SlideUpdate> slideUpdateStream;
+  AnimatedPageDragger animatedPageDragger;
 
   int activeIndex = 0;
   int nextPageIndex = 0;
@@ -41,28 +42,66 @@ class _MyHomePageState extends State<MyHomePage> {
   slideUpdateStream.stream.listen((SlideUpdate event)
     {
       setState(() {
-        if(event.update == UpdateType.dragging){
+        if(event.update == UpdateType.dragging ){
         slideDirection  = event.direction;
         slidePercent = event.slidePercent;
 
-        nextPageIndex = slideDirection == SlideDirection.leftToRight
-                          ? activeIndex - 1
-                          : activeIndex + 1;
+        if(slideDirection == SlideDirection.leftToRight){
+          nextPageIndex = activeIndex - 1;
+        }
+        else if (slideDirection == SlideDirection.rightToLeft){
+           nextPageIndex = activeIndex + 1;
+        }
+        else{
+          nextPageIndex = activeIndex;
+        }
+
+        // nextPageIndex = slideDirection == SlideDirection.leftToRight
+        //                   ? activeIndex - 1
+        //                   : activeIndex + 1;
         nextPageIndex.clamp(0.0, pages.length - 1);
         }
         else if(event.update == UpdateType.donedragging)
         {
 
-          if(slidePercent > 0.5)
+          if(slidePercent > 0.3)
           {
-            activeIndex = slideDirection == SlideDirection.leftToRight
-                          ? activeIndex - 1
-                          : activeIndex + 1;
+          animatedPageDragger  = new AnimatedPageDragger(
+              slideDirection: slideDirection,
+              transitionGoal: TransitionGoal.open,
+              slidePercent: slidePercent,
+              slideUpdateStream: slideUpdateStream,
+              vsync: this,
+          );
+          }
+          else
+          {
+              animatedPageDragger  = new AnimatedPageDragger(
+              slideDirection: slideDirection,
+              transitionGoal: TransitionGoal.close,
+              slidePercent: slidePercent,
+              slideUpdateStream: slideUpdateStream,
+              vsync: this,
+          );
+
+          nextPageIndex = activeIndex;
           }
 
-          slideDirection = SlideDirection.none;
-          slidePercent = 0.0;
+          animatedPageDragger.run();
         }
+        else if(event.update  == UpdateType.animating){
+           slideDirection  = event.direction;
+        slidePercent = event.slidePercent;
+        }
+        else if(event.update  == UpdateType.doneAnimating){
+            activeIndex = nextPageIndex;
+
+            slideDirection = SlideDirection.none;
+            slidePercent = 0.0;
+
+            animatedPageDragger.dispose();
+          
+          }
       });
     });
     }
@@ -88,6 +127,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   new PageIndicatorViewModel(activeIndex, pages, slideDirection, slidePercent),
             ),
             new PageDragger(
+              canDragltor: activeIndex > 0,
+              canDragrtol: activeIndex < pages.length - 1,
               slideUpdateStream: this.slideUpdateStream,
             ),
           ],
